@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Makes the website responsive on phones, tablets and laptops -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="images/logo.png">
+    <!-- Browser tab title -->
+    <title>Pakistan Web GIS | Interactive GIS Application</title>
+<!-- Leaflet CSS -->
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+>
+    <!-- Our custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+    HEADER
+        ===================================================== -->
+<header class="main-header">
+
+    <div class="header-content">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+            <div class="brand-icon">
+    <img src="images/logo.png" alt="Pakistan Web GIS Logo">
+</div>
+            </div>
+
+            <div class="brand-text">
+
+                <div class="brand-kicker">
+                    GEOSPATIAL INFORMATION SYSTEM
+                </div>
+
+                <h1>
+                    Pakistan Web GIS
+                </h1>
+
+                <p>
+                    Interactive Cities &amp; Weather Monitoring System
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="header-meta">
+
+        <div class="header-info">
+
+<div class="header-clouds" aria-hidden="true">
+
+    <span class="cloud cloud-one">☁</span>
+    <span class="cloud cloud-two">☁</span>
+    <span class="cloud cloud-three">☁</span>
+    <span class="cloud cloud-four">☁</span>
+    <span class="cloud cloud-five">☁</span>
+
+    <span class="rain rain-one">⋮</span>
+    <span class="rain rain-two">⋮</span>
+    <span class="rain rain-three">⋮</span>
+    <span class="rain rain-four">⋮</span>
+
+    <span class="snow snow-one">✦</span>
+    <span class="snow snow-two">✧</span>
+    <span class="snow snow-three">•</span>
+
+</div>
+
+</div>
+
+        </div>
+
+    </div>
+
+    <div class="header-line"></div>
+
+</header>
+
+
+<section class="weather-dashboard">
+    <section class="weather-analysis">
+
+    <div class="analysis-header">
+
+        <div>
+            <span class="analysis-badge">
+                WEATHER ANALYTICS
+            </span>
+
+            <h2>Weather Analysis</h2>
+
+            <p>
+                Compare current temperature and precipitation
+                across the mapped weather stations.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="analysis-controls">
+
+        <label for="weather-chart-type">
+            Chart Metric
+        </label>
+
+        <select id="weather-chart-type">
+
+            <option value="temperature">
+                Temperature (°C)
+            </option>
+
+            <option value="precipitation">
+                Precipitation (mm)
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="chart-container">
+
+        <canvas id="weather-chart"></canvas>
+
+    </div>
+
+</section>
+
+    <div class="dashboard-header">
+        <div>
+            <span class="dashboard-badge">LIVE WEATHER</span>
+            <h2>Weather Overview</h2>
+            <p>Current conditions across mapped locations</p>
+        </div>
+
+        <div class="weather-status">
+
+    <span class="status-dot"></span>
+
+    <span id="weather-status-text">
+        Loading live weather...
+    </span>
+
+    <button
+        id="refresh-weather"
+        class="refresh-weather-btn"
+        type="button"
+    >
+        ↻ Refresh
+    </button>
+
+</div>
+        </div>
+    </div>
+
+
+    <div class="weather-dashboard-grid">
+
+        <div class="weather-summary-card">
+            <div class="summary-icon">🌡️</div>
+
+            <div>
+                <span>Average Temperature</span>
+                <strong id="average-temperature">-- °C</strong>
+            </div>
+        </div>
+
+
+        <div class="weather-summary-card">
+            <div class="summary-icon">🔥</div>
+
+            <div>
+                <span>Highest Temperature</span>
+                <strong id="highest-temperature">-- °C</strong>
+                <small id="hottest-location">Loading...</small>
+            </div>
+        </div>
+
+
+        <div class="weather-summary-card">
+            <div class="summary-icon">❄️</div>
+
+            <div>
+                <span>Lowest Temperature</span>
+                <strong id="lowest-temperature">-- °C</strong>
+                <small id="coolest-location">Loading...</small>
+            </div>
+        </div>
+
+
+        <div class="weather-summary-card">
+            <div class="summary-icon">🌧️</div>
+
+            <div>
+                <span>Average Precipitation</span>
+                <strong id="average-precipitation">-- mm</strong>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+        <!-- =================================================
+        MAP SECTION
+            ================================================= -->
+        <section class="map-section">
+
+            <div class="map-header">
+
+                <div>
+                    <h2>Interactive Map of Pakistan</h2>
+                    <div class="map-search">
+
+    <div class="search-box">
+
+        <span class="search-icon">🔍</span>
+
+        <input
+            type="text"
+            id="city-search"
+            placeholder="Search for a city..."
+            autocomplete="off"
+        >
+
+        <button id="clear-search" type="button">
+            ×
+        </button>
+
+    </div>
+
+    <div id="search-results" class="search-results"></div>
+    <button
+    id="show-all-cities"
+    class="show-all-cities-btn"
+    type="button"
+>
+    🏙️ Show All Cities
+</button>
+
+</div>
+                    <p>
+                        Explore cities and weather stations using
+                        interactive GIS layers.
+                    </p>
+                </div>
+
+                <button id="reset-map" class="reset-button">
+                    ⌂ Reset Map
+                </button>
+
+            </div>
+
+
+            <!-- Leaflet map will appear here -->
+            <div id="map"></div>
+
+        </section>
+        <!-- =========================================
+    SELECTED LOCATION DETAILS
+========================================= -->
+
+<section class="location-panel" id="location-panel">
+
+    <div class="location-panel-header">
+
+        <div>
+            <span class="location-badge">
+                SELECTED LOCATION
+            </span>
+
+            <h2 id="selected-location-name">
+                No Location Selected
+            </h2>
+
+            <p id="selected-location-subtitle">
+                Click a city or weather station on the map
+                to view its information here.
+            </p>
+        </div>
+
+        <div class="location-status">
+            <span class="location-status-dot"></span>
+            <span>Map Selection</span>
+        </div>
+
+    </div>
+    <button
+    id="clear-location"
+    class="clear-location-btn"
+    type="button"
+>
+    Clear Selection
+</button>
+
+
+    <div class="location-details-grid">
+
+        <div class="location-detail-card">
+
+            <span class="location-detail-icon">
+                📍
+            </span>
+
+            <div>
+                <span class="location-detail-label">
+                    Province / Region
+                </span>
+
+                <strong id="selected-province">
+                    —
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="location-detail-card">
+
+            <span class="location-detail-icon">
+                🏷️
+            </span>
+
+            <div>
+                <span class="location-detail-label">
+                    Location Type
+                </span>
+
+                <strong id="selected-type">
+                    —
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="location-detail-card">
+
+            <span class="location-detail-icon">
+                🌡️
+            </span>
+
+            <div>
+                <span class="location-detail-label">
+                    Temperature
+                </span>
+
+                <strong id="selected-temperature">
+                    —
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="location-detail-card">
+
+            <span class="location-detail-icon">
+                💧
+            </span>
+
+            <div>
+                <span class="location-detail-label">
+                    Humidity
+                </span>
+
+                <strong id="selected-humidity">
+                    —
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="location-detail-card">
+
+            <span class="location-detail-icon">
+                🌧️
+            </span>
+
+            <div>
+                <span class="location-detail-label">
+                    Precipitation
+                </span>
+
+                <strong id="selected-precipitation">
+                    —
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="location-detail-card">
+
+            <span class="location-detail-icon">
+                💨
+            </span>
+
+            <div>
+                <span class="location-detail-label">
+                    Wind Speed
+                </span>
+
+                <strong id="selected-wind">
+                    —
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="location-coordinates">
+
+        <span>🌐 Coordinates</span>
+
+        <strong id="selected-coordinates">
+            —
+        </strong>
+
+    </div>
+
+</section>
+
+
+        <!-- =================================================
+            INFORMATION PANEL
+            ================================================= -->
+        <section class="info-section">
+
+            <div class="info-card">
+
+                <section class="info-section">
+
+    <div class="info-header">
+        <span class="info-badge">PROJECT INFORMATION</span>
+        <h2>About This Web GIS</h2>
+        <p>
+            An interactive Web GIS application for exploring selected cities
+            and weather-station information across Pakistan.
+        </p>
+    </div>
+
+    <div class="info-grid">
+
+        <div class="info-card">
+            <div class="info-card-icon">🗺️</div>
+            <h3>Interactive Mapping</h3>
+            <p>
+                The application provides interactive navigation using
+                zoom, pan, layer switching, and multiple basemap options.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <div class="info-card-icon">🏙️</div>
+            <h3>City Information</h3>
+            <p>
+                The city dataset contains 20 selected locations with
+                city name, province or region, and city classification.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <div class="info-card-icon">🌦️</div>
+            <h3>Weather Information</h3>
+            <p>
+                The weather-station dataset contains temperature and
+                rainfall values for 20 selected locations.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <div class="info-card-icon">💻</div>
+            <h3>Web GIS Technologies</h3>
+            <p>
+                Developed using HTML, CSS, JavaScript, GeoJSON and
+                the Leaflet web-mapping library.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="data-note">
+
+    <strong>Data sources:</strong>
+
+    City and weather-station locations are provided
+    through the project's GeoJSON datasets.
+
+    Live weather conditions are retrieved from
+    Open-Meteo and displayed for the mapped locations.
+
+    <br><br>
+
+    <strong>Mapping:</strong>
+
+    OpenStreetMap and Esri World Imagery are used
+    as basemap sources.
+
+</div>
+
+</section>
+                <p>
+                    This interactive Web GIS presents selected cities
+                    and weather stations across Pakistan. Users can
+                    explore geographic locations, view attribute
+                    information and switch between different map layers
+                    and basemaps.
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <h3>Map Layers</h3>
+
+                <ul>
+                    <li>OpenStreetMap</li>
+                    <li>Satellite Imagery</li>
+                    <li>Major Cities</li>
+                    <li>Weather Stations</li>
+                </ul>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+        FOOTER
+        ===================================================== -->
+    <footer class="site-footer">
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <strong>Pakistan Web GIS</strong>
+            <span>Interactive Cities & Weather Monitoring System</span>
+        </div>
+
+        <div class="footer-links">
+
+    <span>Built with Leaflet</span>
+
+    <span>Data format: GeoJSON</span>
+
+    <span>Weather: Open-Meteo</span>
+
+    <span>Basemap: OpenStreetMap & Esri</span>
+
+</div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <span>Web GIS Assignment Project</span>
+        <span>© 2026 Pakistan Web GIS</span>
+    </div>
+
+</footer>
+
+
+    <!-- =====================================================
+JAVASCRIPT FILES
+===================================================== -->
+
+    <!-- =====================================================
+    LEAFLET GIS LIBRARY
+    ===================================================== -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="js/map.js"></script>
+<script src="js/cities.js"></script>
+<script src="js/weather.js"></script>
+
+</body>
+
+</html>
